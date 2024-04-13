@@ -94,6 +94,7 @@ router.delete('/:id', async (req,res)=>{
        return res.status(500).json({success: false, error: err}) 
     })
 })
+
 // sample counts
 router.get('/get/count', async(req,res)=>{
     const productCount = await Product.countDocuments({})
@@ -104,6 +105,7 @@ router.get('/get/count', async(req,res)=>{
         productCount : productCount
     })
 })
+
 // Get Featured Products
 router.get('/get/featured/:count', async(req,res)=>{
     const count = req.params.count ? req.params.count : 0

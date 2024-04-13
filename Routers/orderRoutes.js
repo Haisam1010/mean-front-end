@@ -1,3 +1,4 @@
+import express from 'express';
 import Order from "../Models/Order.js";
 import Order_items from "../Models/Order_items.js";
 const router = express.Router();
@@ -13,14 +14,15 @@ router.get('/',async(req,res)=>{
 
 // Get  Orders By ID
 router.get('/:id',async(req,res)=>{
-    const order = await Order.findById(req.params.id).populate('user','name').populate({path:'orderItems',populate:'product'})
+    const order = await Order.findById(req.params.id).populate('user','name')
+    .populate({path:'orderItems',populate:{path:'product',populate:'category'}})
     if(!order){
         res.status(500).json({success:false})
     }
     res.send(order)
 })
 // Post Orders 
-router.post('/',async (req,res)=>{
+router.post('/product',async (req,res)=>{
     const orderItemsId =Promise.all( req.body.orderItems.map(async(orderItem)=>{
         const newOrderItem = new Order_items({
             quantity: orderItem.quantity,
@@ -50,4 +52,28 @@ router.post('/',async (req,res)=>{
     res.send(orders)
 })
 
+// Update Orders 
+router.put('/:id', async (req,res)=>{
+    const updateOrder = await Order.findByIdAndUpdate(req.params.id,{
+      status: req.body.status
+    })
+    category = await updateOrder.save()
 
+    if(!category){
+        return res.status(400).send('The Category Cannot be Created')
+    }
+    res.send(category)
+})
+
+// Delete Orders
+
+router.delete(':/id', async (req,res)=>{
+    Order.findByIdAndDelete(req.params.id).then(order => {
+       if (order){
+            return res.status(200).json({msg:'Order Deleted'})
+       } 
+       else{
+            return res.status(500).json({msg:"Order Not Found"})
+       }
+    })
+})

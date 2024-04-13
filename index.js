@@ -23,13 +23,15 @@ import productsRouter from './Routers/productsRouter.js'
 import catagoriesRoute from './Routers/catagoriesRoute.js'
 import userRouter from './Routers/userRoutes.js'
 import Order_items from "./Models/Order_items.js";
+import Orders from "./Models/Order.js";
+
 
 
 
 // ROutes
 app.use('/api/v1/products', productsRouter)
 app.use('/api/v1/category', catagoriesRoute)
-app.use('/api/v1/orders', Order_items)
+app.use('/api/v1/order', Orders)
 app.use('/api/v1/users', userRouter)
 
 
